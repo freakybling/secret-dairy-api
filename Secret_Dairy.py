@@ -7,6 +7,14 @@ app = Flask(__name__)
 def home():
     return jsonify("Hello!, welcome to test odf day 6.")
 
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({"error":"Page not found"}), 404
+
+@app.errorhandler(500)
+def server_error(error):
+    return jsonify({"error": "somehing wen wrong!"}), 500
+
 @app.route('/dairy', methods=["POST", "GET"])
 def dai():
     if request.method == 'POST':
