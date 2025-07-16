@@ -1,4 +1,5 @@
 from flask import Flask,jsonify,request
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -37,11 +38,18 @@ def diary_entry():
     if not note:
         return jsonify({"error": "No diary entry provided"}), 400
 
+    try:
+        with open("dairy.txt","a") as f:
+            f.write(f"Entry: {note}\n")
+            f.write(f"Time: {datetime.now()}\n")
+            f.write(f"-" * 40 +"\n")
+    except Exception as e:
+        return jsonify({"Error":f"Failed to save note: {str(e)}"}), 500
+
     return jsonify({
         "message": "Note saved!",
         "your_entry": note
     }), 201
-
 
 if __name__ == '__main__':
     app.run(debug=True)
